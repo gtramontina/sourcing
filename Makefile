@@ -26,7 +26,8 @@ clean:; @cat .gitignore | xargs rm -rf
 .PHONY: test
 REPORTER ?= tap-dot
 test: node_modules node_modules/tape node_modules/tape-catch node_modules/tap-dot node_modules/tap-spec
-	@time tape 'node_modules/babel/register.js' $(shell find tests -name '*_test.js') | $(REPORTER)
+	@NODE_PATH=. time tape 'node_modules/babel/register.js' \
+		$(shell find tests -name '*_test.js') | $(REPORTER)
 
 #:Run all tests and re-run them upon file changes
 .PHONY: test.watch
