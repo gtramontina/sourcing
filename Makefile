@@ -25,7 +25,7 @@ clean:; @cat .gitignore | xargs rm -rf
 #:Run all tests - REPORTER=tap-dot|tap-spec
 .PHONY: test
 REPORTER ?= tap-dot
-test: node_modules node_modules/tape node_modules/tape-catch node_modules/tap-dot node_modules/tap-spec
+test: node_modules
 	@NODE_PATH=. time tape 'node_modules/babel/register.js' \
 		$(shell find tests -name '*_test.js') | $(REPORTER)
 
@@ -37,7 +37,7 @@ test.watch: node_modules/nodemon node_modules/tap-min
 
 #:Check for inconsistencies
 .PHONY: lint
-lint: node_modules node_modules/eslint node_modules/babel-eslint node_modules/eslint-config-defaults node_modules/eslint-plugin-filenames
+lint: node_modules
 	@eslint --parser 'babel-eslint' src/** tests/**
 
 #:Release to NPM
