@@ -40,6 +40,13 @@ test.watch: node_modules/nodemon node_modules/tap-min
 lint: node_modules node_modules/eslint node_modules/babel-eslint node_modules/eslint-config-defaults node_modules/eslint-plugin-filenames
 	@eslint --parser 'babel-eslint' src/** tests/**
 
+#:Release to NPM
+.PHONY: release
+release: node_modules/semantic-release-cli
+	@semantic-release pre
+	@npm publish
+	@semantic-release post
+
 #:This list
 .PHONY: ?
 ?:;@for file in "Makefile $$(perl -lne 'print for m|^include\s+(.*)$$|g' Makefile)"; do \
