@@ -42,7 +42,7 @@ lint: node_modules
 
 #:Release to NPM
 .PHONY: release
-release: node_modules/semantic-release-cli
+release:
 	@semantic-release pre
 	@npm publish
 	@semantic-release post

@@ -1,8 +1,11 @@
 sudo: false
+addons:
+  apt:
+    packages:
+    - time
 language: node_js
 node_js:
   - "0.12"
-  - "4.0"
 cache:
   directories:
     - node_modules
