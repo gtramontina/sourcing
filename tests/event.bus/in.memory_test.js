@@ -1,41 +1,41 @@
-import "tests/helper";
+import 'tests/helper';
 
-import InMemoryEventTransport from "src/event.bus/in.memory";
+import InMemoryEventTransport from 'src/event.bus/in.memory';
 
-describe("InMemoryEventTransport", () => {
-  describe("#pub/sub", () => {
-    it("publishes events to all subscribers", () => {
+describe('InMemoryEventTransport', () => {
+  describe('#pub/sub', () => {
+    it('publishes events to all subscribers', () => {
       const transport = new InMemoryEventTransport();
       let actualEvent1;
-      const event1 = { event: "1" };
+      const event1 = { event: '1' };
       let actualEvent2;
-      const event2 = { event: "2" };
+      const event2 = { event: '2' };
       const allEvents = [];
 
-      transport.subscribe("event 1", event => actualEvent1 = event);
-      transport.subscribe("event 2", event => actualEvent2 = event);
+      transport.subscribe('event 1', event => actualEvent1 = event);
+      transport.subscribe('event 2', event => actualEvent2 = event);
       transport.any((name, event) => allEvents.push([name, event]));
 
-      transport.publish("event 1", event1);
-      transport.publish("event 2", event2);
+      transport.publish('event 1', event1);
+      transport.publish('event 2', event2);
 
       assert.deepEqual(actualEvent1, event1);
       assert.deepEqual(actualEvent2, event2);
-      assert.deepEqual(allEvents, [["event 1", event1], ["event 2", event2]]);
+      assert.deepEqual(allEvents, [['event 1', event1], ['event 2', event2]]);
     });
   });
 
-  describe(".reset", () => {
-    it("clears any existing data", () => {
+  describe('.reset', () => {
+    it('clears any existing data', () => {
       const transport = new InMemoryEventTransport();
       let actualEvent1;
-      const event1 = { event: "1" };
+      const event1 = { event: '1' };
 
-      transport.subscribe("event 1", event => actualEvent1 = event);
+      transport.subscribe('event 1', event => actualEvent1 = event);
       InMemoryEventTransport.reset();
-      transport.publish("event 1", event1);
+      transport.publish('event 1', event1);
 
-      assert.ok(actualEvent1 === undefined, "should clear all listeners");
+      assert.ok(actualEvent1 === undefined, 'should clear all listeners');
     });
   });
 });

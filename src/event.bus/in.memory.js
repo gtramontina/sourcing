@@ -1,5 +1,5 @@
 const CHANNELS = {};
-const ALL = "__any__";
+const ALL = '__any__';
 
 export default class InMemoryEventTransport {
   static reset () {

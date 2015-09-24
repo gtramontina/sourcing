@@ -1,4 +1,4 @@
-import pascalCase from "pascal-case";
+import pascalCase from 'pascal-case';
 
 const aggregateUUID = Symbol();
 const name = Symbol();
@@ -6,7 +6,7 @@ const data = Symbol();
 
 export default class Event {
   constructor (eventName, eventData = {}) {
-    if (!eventName) { throw new ReferenceError("Event requires a name"); }
+    if (!eventName) { throw new ReferenceError('Event requires a name'); }
     this[name] = eventName;
     this[data] = eventData;
   }

@@ -1,5 +1,5 @@
-import Event from "../event";
-import EventBus from "../event.bus";
+import Event from '../event';
+import EventBus from '../event.bus';
 
 const eventStore = Symbol();
 const AGGREGATES = new Set();

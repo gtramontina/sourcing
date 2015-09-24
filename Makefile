@@ -40,7 +40,7 @@ test.watch: node_modules/nodemon node_modules/tap-min
 #:Check for inconsistencies
 .PHONY: lint
 lint: node_modules
-	@eslint --parser 'babel-eslint' src/** tests/**
+	@eslint --parser 'babel-eslint' $(LINT_FLAGS) src/** tests/**
 
 #:Release to NPM
 .PHONY: release

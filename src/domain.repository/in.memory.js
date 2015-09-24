@@ -1,5 +1,5 @@
 const STORE = [];
-const CREATED_AT = "_createdAt_";
+const CREATED_AT = '_createdAt_';
 
 export default class InMemoryEventStore {
   static reset () {

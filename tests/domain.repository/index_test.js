@@ -1,8 +1,8 @@
-import "tests/helper";
+import 'tests/helper';
 
-import Event from "src/event";
-import Entity from "src/entity";
-import DomainRepository from "src/domain.repository";
+import Event from 'src/event';
+import Entity from 'src/entity';
+import DomainRepository from 'src/domain.repository';
 
 class SampleEntity extends Entity {
   constructor () {
@@ -11,21 +11,21 @@ class SampleEntity extends Entity {
   }
   static create () {
     const self = new this();
-    self.applyEvent(new Event("entity created", { uuid: this.generateUUID() }));
+    self.applyEvent(new Event('entity created', { uuid: this.generateUUID() }));
     return self;
   }
   appendToName (string) {
-    this.applyEvent(new Event("appended to name", { string }));
+    this.applyEvent(new Event('appended to name', { string }));
   }
   onEntityCreated (event) { this.uuid = event.data.uuid; }
   onAppendedToName (event) { this.name += event.data.string; }
 }
 
-describe("DomainRepository", () => {
-  it("is a factory class", () => assert.throws(() => new DomainRepository(), TypeError));
+describe('DomainRepository', () => {
+  it('is a factory class', () => assert.throws(() => new DomainRepository(), TypeError));
 
-  describe(".commit", () => {
-    it("applies the events in chronological order", () => {
+  describe('.commit', () => {
+    it('applies the events in chronological order', () => {
       DomainRepository.begin();
       const entity = SampleEntity.create();
       entity.appendToName('FirstName');
@@ -33,9 +33,9 @@ describe("DomainRepository", () => {
       DomainRepository.commit();
 
       const restoredInstance = DomainRepository.find(SampleEntity, entity.uuid);
-      assert.equal(restoredInstance.constructor.name, "SampleEntity");
+      assert.equal(restoredInstance.constructor.name, 'SampleEntity');
       assert.equal(restoredInstance.uuid, entity.uuid);
-      assert.equal(restoredInstance.name, "FirstNameLastName");
+      assert.equal(restoredInstance.name, 'FirstNameLastName');
     });
   });
 });

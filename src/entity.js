@@ -1,5 +1,5 @@
-import uuidGen from "uuid";
-import DomainRepository from "./domain.repository";
+import uuidGen from 'uuid';
+import DomainRepository from './domain.repository';
 
 const appliedEvents = Symbol();
 const uuid = Symbol();
