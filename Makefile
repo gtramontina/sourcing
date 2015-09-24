@@ -24,15 +24,17 @@ clean:; @cat .gitignore | xargs rm -rf
 
 #:Run all tests - REPORTER=tap-dot|tap-spec
 .PHONY: test
-REPORTER ?= tap-dot
+REPORTER ?= dot
 test: node_modules
-	@NODE_PATH=. time tape 'node_modules/babel/register.js' \
-		$(shell find tests -name '*_test.js') | $(REPORTER)
+	@NODE_PATH=. time -p mocha \
+		--compilers js:babel/register \
+		--reporter $(REPORTER) \
+		"tests/**/*_test.js"
 
 #:Run all tests and re-run them upon file changes
 .PHONY: test.watch
 test.watch: node_modules/nodemon node_modules/tap-min
-	@REPORTER=tap-min nodemon -q -I -x \
+	@REPORTER=$${REPORTER-min} nodemon -q -I -x \
 		"printf '\033\143'; $(MAKE) test; printf '\n» Last run: '; date +'%r'"
 
 #:Check for inconsistencies

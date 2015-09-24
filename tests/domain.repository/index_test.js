@@ -1,4 +1,5 @@
-import test from "tests/support/helper";
+import "tests/helper";
+
 import Event from "src/event";
 import Entity from "src/entity";
 import DomainRepository from "src/domain.repository";
@@ -20,21 +21,21 @@ class SampleEntity extends Entity {
   onAppendedToName (event) { this.name += event.data.string; }
 }
 
-test("DomainRepository # is a factory class", assert => {
-  assert.throws(() => { new DomainRepository(); }, TypeError, "should not allow direct instantiation");
-  assert.end();
-});
+describe("DomainRepository", () => {
+  it("is a factory class", () => assert.throws(() => new DomainRepository(), TypeError));
 
-test("DomainRepository # committing a transaction", assert => {
-  DomainRepository.begin();
-  const entity = SampleEntity.create();
-  entity.appendToName('FirstName');
-  entity.appendToName('LastName');
-  DomainRepository.commit();
+  describe(".commit", () => {
+    it("applies the events in chronological order", () => {
+      DomainRepository.begin();
+      const entity = SampleEntity.create();
+      entity.appendToName('FirstName');
+      entity.appendToName('LastName');
+      DomainRepository.commit();
 
-  const restoredInstance = DomainRepository.find(SampleEntity, entity.uuid);
-  assert.equal(restoredInstance.constructor.name, "SampleEntity");
-  assert.equal(restoredInstance.uuid, entity.uuid, "should apply the events only once");
-  assert.equal(restoredInstance.name, 'FirstNameLastName', "should apply the events in order");
-  assert.end();
+      const restoredInstance = DomainRepository.find(SampleEntity, entity.uuid);
+      assert.equal(restoredInstance.constructor.name, "SampleEntity");
+      assert.equal(restoredInstance.uuid, entity.uuid);
+      assert.equal(restoredInstance.name, "FirstNameLastName");
+    });
+  });
 });

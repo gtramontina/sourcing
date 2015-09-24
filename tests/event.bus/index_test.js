@@ -1,19 +1,26 @@
-import test from "tests/support/helper";
+import "tests/helper";
+
 import EventBus from "src/event.bus";
 
-test("EventBus # pub/sub", assert => {
-  EventBus.subscribe("something happened", (eventData) => {
-    assert.deepEqual(eventData, { some: "data" });
-    assert.end();
+describe("EventBus", () => {
+  describe(".pub/sub", () => {
+    it("publishes specific events to specific subscribers", (done) => {
+      EventBus.subscribe("something happened", (eventData) => {
+        assert.deepEqual(eventData, { some: "data" });
+        done();
+      });
+      EventBus.publish("something happened", { some: "data" });
+    });
   });
-  EventBus.publish("something happened", { some: "data" });
-});
 
-test("EventBus # any", assert => {
-  EventBus.any((eventName, eventData) => {
-    assert.equal(eventName, "something happened");
-    assert.deepEqual(eventData, { some: "data" });
-    assert.end();
+  describe(".any", () => {
+    it("publishes any events to subscribers of any event", (done) => {
+      EventBus.any((eventName, eventData) => {
+        assert.equal(eventName, "something happened");
+        assert.deepEqual(eventData, { some: "data" });
+        done();
+      });
+      EventBus.publish("something happened", { some: "data" });
+    });
   });
-  EventBus.publish("something happened", { some: "data" });
 });

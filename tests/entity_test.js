@@ -1,12 +1,8 @@
-import test from "tests/support/helper";
+import "tests/helper";
+
 import Entity from "src/entity";
 import Event from "src/event";
 import DomainRepository from "src/domain.repository";
-
-test("Entity # is an abstract class", assert => {
-  assert.throws(() => { new Entity(); }, TypeError, "should not allow direct instantiation");
-  assert.end();
-});
 
 class SampleEntity extends Entity {
   constructor () {
@@ -23,53 +19,50 @@ class SampleEntity extends Entity {
   onCounterIncremented () { this.counter++; }
 }
 
+describe("Entity", () => {
+  it("is an abstract class", () => assert.throws(() => new Entity(), TypeError));
 
-test("Entity # building an entity from events", assert => {
-  const entity = SampleEntity.fromEvents([
-    new Event("entity created", { uuid: "new uuid" }),
-    new Event("counter incremented", {})
-  ]);
+  describe("#fromEvents", () => {
+    it ("replays all given events", () => {
+      const entity = SampleEntity.fromEvents([
+        new Event("entity created", { uuid: "new uuid" }),
+        new Event("counter incremented", {})
+      ]);
+      assert.equal(entity.counter, 1);
+      assert.equal(entity.uuid, "new uuid");
+    });
+  });
 
-  assert.deepEqual(entity.counter, 1, "should re-play the events");
-  assert.deepEqual(entity.uuid, "new uuid", "should re-play the events");
-  assert.end();
-});
+  describe("#find", () => {
+    it("rebuilds an entity by UUID", () => {
+      DomainRepository.begin();
+      const entity = SampleEntity.create();
+      entity.incrementCounter();
+      entity.incrementCounter();
+      DomainRepository.commit();
 
-test("Entity # finding an entity by UUID", assert => {
-  DomainRepository.begin();
-  const entity = SampleEntity.create();
-  entity.incrementCounter();
-  entity.incrementCounter();
-  DomainRepository.commit();
+      const found = SampleEntity.find(entity.uuid);
+      assert.deepEqual(found, entity);
+    });
+  });
 
-  const found = SampleEntity.find(entity.uuid);
-  assert.deepEqual(found, entity, "should be the same");
-  assert.end();
-});
+  describe(".generateUUID", () => {
+    it("generates always unique IDs", () => {
+      const lotsOfUUIDs = Reflect.apply(Array, null, {length: 1000}).map(Function.call, Entity.generateUUID);
+      const dedupedUUIDs = lotsOfUUIDs.filter((value, index, self) => self.indexOf(value) === index);
 
-test("Entity # generating UUIDs", assert => {
-  const lotsOfUUIDs = Reflect.apply(Array, null, {length: 1000}).map(Function.call, Entity.generateUUID);
-  const dedupedUUIDs = lotsOfUUIDs.filter((value, index, self) => self.indexOf(value) === index);
+      assert.equal(lotsOfUUIDs.length, dedupedUUIDs.length);
+    });
+  });
 
-  assert.equal(lotsOfUUIDs.length, dedupedUUIDs.length, "should always be unique");
-  assert.end();
-});
+  describe("#applyEvent", () => {
+    const entity = SampleEntity.create();
+    entity.applyEvent(new Event("counter incremented", {}));
+    const lastEvent = entity.appliedEvents.pop();
 
-test("Entity # applying events", assert => {
-  const entity = SampleEntity.create();
-  entity.applyEvent(new Event("counter incremented", {}));
-
-  const lastEvent = entity.appliedEvents.pop();
-  assert.ok(lastEvent, "should add the event to the list of applied events");
-  assert.equal(lastEvent.aggregateUUID, entity.uuid, "should set the aggregateUUID on the event");
-  assert.equal(entity.counter, 1, "should run the event handler function");
-
-  assert.end();
-});
-
-test("Entity # applying events without a proper event handler", assert => {
-  const entity = new SampleEntity();
-
-  assert.throws(() => { entity.applyEvent(new Event("not implemented")); }, ReferenceError, "should error when the event handler is not found");
-  assert.end();
+    it("adds the event to the list of applied events", () => assert.ok(lastEvent));
+    it("sets the aggregateUUID on the event", () => assert.equal(lastEvent.aggregateUUID, entity.uuid));
+    it("runs the event handler function", () => assert.equal(entity.counter, 1));
+    it("fails if the event handler is not implemented", () => assert.throws(() => entity.applyEvent(new Event("not implemented")), ReferenceError));
+  });
 });
