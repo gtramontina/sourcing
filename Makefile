@@ -22,7 +22,7 @@ node_modules/%:; @npm install $*
 .PHONY: clean
 clean:; @cat .gitignore | xargs rm -rf
 
-#:Run all tests - REPORTER=tap-dot|tap-spec
+#:Run all tests - Opts: REPORTER=dot|spec COVERAGE=true
 .PHONY: test
 REPORTER ?= dot
 ifdef COVERAGE

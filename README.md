@@ -13,7 +13,7 @@ make clean       # Remove all generated assets
 make install     # Install all required modules
 make lint        # Check for inconsistencies
 make release     # Release to NPM
-make test        # Run all tests - REPORTER=tap-dot|tap-spec
+make test        # Run all tests - Opts: REPORTER=dot|spec COVERAGE=true
 make test.watch  # Run all tests and re-run them upon file changes
 
 ```
