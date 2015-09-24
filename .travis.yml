@@ -12,6 +12,6 @@ cache:
 notifications:
   email: false
 script:
-  - make
+  - COVERAGE=true make
 after_success:
   - make release

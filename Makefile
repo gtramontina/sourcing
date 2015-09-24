@@ -25,10 +25,14 @@ clean:; @cat .gitignore | xargs rm -rf
 #:Run all tests - REPORTER=tap-dot|tap-spec
 .PHONY: test
 REPORTER ?= dot
+ifdef COVERAGE
+MOCHA := istanbul cover _mocha --
+else
+MOCHA := mocha
+endif
 test: node_modules
-	@NODE_PATH=. time -p mocha \
-		--compilers js:babel/register \
-		--reporter $(REPORTER) \
+	@NODE_PATH=. time -p $(MOCHA) \
+		--compilers js:babel/register --reporter $(REPORTER) \
 		"tests/**/*_test.js"
 
 #:Run all tests and re-run them upon file changes
