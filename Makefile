@@ -37,7 +37,7 @@ test: node_modules
 
 #:Run all tests and re-run them upon file changes
 .PHONY: test.watch
-test.watch: node_modules/nodemon node_modules/tap-min
+test.watch: node_modules/nodemon
 	@REPORTER=$${REPORTER-min} nodemon -q -I -x \
 		"printf '\033\143'; $(MAKE) test; printf '\n» Last run: '; date +'%r'"
 
