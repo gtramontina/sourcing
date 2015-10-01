@@ -2,8 +2,6 @@ import Event from '../event';
 import EventBus from '../event.bus';
 
 const eventStore = Symbol();
-const AGGREGATES = new Set();
-
 export default class DomainRepository {
   constructor () {
     throw new TypeError(`"DomainRepository" is a factory class. To begin a transaction run "DomainRepository.begin()"`);
@@ -19,7 +17,7 @@ export default class DomainRepository {
   }
 
   static begin () {
-    AGGREGATES.clear();
+    process.aggregates = new Set();
   }
 
   static find (Type, uuid) {
@@ -29,17 +27,18 @@ export default class DomainRepository {
   }
 
   static add (aggregate) {
-    AGGREGATES.add(aggregate);
+    aggregates().add(aggregate);
     return aggregate;
   }
 
   static commit () {
-    AGGREGATES.forEach((aggregate) => {
+    aggregates().forEach((aggregate) => {
       aggregate.appliedEvents.forEach((event) => {
         Reflect.apply(save, this, [event]);
         EventBus.publish(event.name, event.data);
       });
     });
+    Reflect.deleteProperty(process, 'aggregates');
   }
 }
 
@@ -49,4 +48,9 @@ function save (event) {
     data: event.data,
     aggregateUUID: event.aggregateUUID
   });
+}
+
+function aggregates () {
+  if (!process.aggregates) { DomainRepository.begin(); }
+  return process.aggregates;
 }
