@@ -6,7 +6,7 @@ export default class EventBus {
   }
 
   static get transport () {
-    if (!this[transport]) { throw new ReferenceError(`No Transport defined. Please define one with "EventBus.transport = new MyTransport()"`); }
+    if (!this[transport]) { throw new ReferenceError(`No Transport defined. Please define one with "${this.name}.transport = new MyTransport()"`); }
     return this[transport];
   }
 

@@ -4,7 +4,7 @@ import EventBus from '../event.bus';
 const eventStore = Symbol();
 export default class DomainRepository {
   constructor () {
-    throw new TypeError(`"DomainRepository" is a factory class. To begin a transaction run "DomainRepository.begin()"`);
+    throw new TypeError(`"${this.constructor.name}" is a factory class. To begin a transaction run "DomainRepository.begin()"`);
   }
 
   static set eventStore (newEventStore) {
@@ -12,7 +12,7 @@ export default class DomainRepository {
   }
 
   static get eventStore () {
-    if (!this[eventStore]) { throw new ReferenceError(`No EventStore defined. Please define one with "DomainRepository.eventStore = new MyEventStore()"`); }
+    if (!this[eventStore]) { throw new ReferenceError(`No EventStore defined. Please define one with "${this.name}.eventStore = new MyEventStore()"`); }
     return this[eventStore];
   }
 

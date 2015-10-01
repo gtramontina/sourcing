@@ -6,7 +6,7 @@ const data = Symbol();
 
 export default class Event {
   constructor (eventName, eventData = {}) {
-    if (!eventName) { throw new ReferenceError('Event requires a name'); }
+    if (!eventName) { throw new ReferenceError(`${this.constructor.name} requires a name`); }
     this[name] = eventName;
     this[data] = eventData;
   }

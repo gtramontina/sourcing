@@ -3,7 +3,7 @@ import EventBus from './event.bus';
 
 export default class Report {
   constructor () {
-    if (this.constructor === Report) { throw new TypeError(`"Report" is an abstract class.`); }
+    if (this.constructor === Report) { throw new TypeError(`"${this.constructor.name}" is an abstract class.`); }
     EventBus.any(dispatchEvent.bind(this));
   }
 }

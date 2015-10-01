@@ -6,7 +6,7 @@ const uuid = Symbol();
 
 export default class Entity {
   constructor () {
-    if (this.constructor === Entity) { throw new TypeError(`"Entity" is an abstract class.`); }
+    if (this.constructor === Entity) { throw new TypeError(`"${this.constructor.name}" is an abstract class.`); }
     this[appliedEvents] = [];
   }
 
