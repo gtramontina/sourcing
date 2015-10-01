@@ -4,7 +4,7 @@ import EventBus from '../event.bus';
 const eventStore = Symbol();
 export default class DomainRepository {
   constructor () {
-    throw new TypeError(`"${this.constructor.name}" is a factory class. To begin a transaction run "DomainRepository.begin()"`);
+    throw new TypeError(`"${this.constructor.name}" is a static class. To begin a transaction run "DomainRepository.begin()"`);
   }
 
   static set eventStore (newEventStore) {

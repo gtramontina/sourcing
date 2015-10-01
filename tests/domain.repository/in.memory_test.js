@@ -21,14 +21,4 @@ describe('InMemoryEventStore', () => {
       assert.deepEqual(aggregate2Events.map(event => event.name), ['2.1', '2.2']);
     });
   });
-
-  describe('.reset', () => {
-    it('clears any existing data', () => {
-      const eventStore = new InMemoryEventStore();
-      eventStore.save({ name: '1.1', data: { some: 'data' }, aggregateUUID: '1' });
-      InMemoryEventStore.reset();
-      const aggregateEvents = eventStore.queryByUUID('1');
-      assert.deepEqual(aggregateEvents, []);
-    });
-  });
 });

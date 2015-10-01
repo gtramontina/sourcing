@@ -22,7 +22,7 @@ class SampleEntity extends Entity {
 }
 
 describe('DomainRepository', () => {
-  it('is a factory class', () => assert.throws(() => new DomainRepository(), TypeError));
+  it('is a static class', () => assert.throws(() => new DomainRepository(), TypeError));
 
   describe('.commit', () => {
     it('applies the events in chronological order', () => {
@@ -36,6 +36,13 @@ describe('DomainRepository', () => {
       assert.equal(restoredInstance.constructor.name, 'SampleEntity');
       assert.equal(restoredInstance.uuid, entity.uuid);
       assert.equal(restoredInstance.name, 'FirstNameLastName');
+    });
+  });
+
+  describe('.eventStore', () => {
+    it('complains when there is no eventStore set', () => {
+      DomainRepository.eventStore = null;
+      assert.throws(() => DomainRepository.eventStore, ReferenceError);
     });
   });
 });

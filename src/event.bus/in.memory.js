@@ -1,27 +1,23 @@
-const CHANNELS = {};
 const ALL = '__any__';
 
+const channels = Symbol();
 export default class InMemoryEventTransport {
-  static reset () {
-    for (const channel in CHANNELS) { Reflect.deleteProperty(CHANNELS, channel) }
+  constructor () {
+    this[channels] = {}
   }
 
   publish (eventName, eventData) {
     const dataDump = JSON.stringify(eventData); // Simulates the event going through the wire
-    subscribersOf(eventName).forEach(callback => Reflect.apply(callback, this, [JSON.parse(dataDump)]));
-    subscribersOf(ALL).forEach(callback => Reflect.apply(callback, this, [eventName, JSON.parse(dataDump)]));
+    (this[channels][eventName] || []).forEach(callback => Reflect.apply(callback, this, [JSON.parse(dataDump)]));
+    (this[channels][ALL] || []).forEach(callback => Reflect.apply(callback, this, [eventName, JSON.parse(dataDump)]));
   }
 
   subscribe (eventName, callback) {
-    const channel = CHANNELS[eventName] = CHANNELS[eventName] || [];
+    const channel = this[channels][eventName] = this[channels][eventName] || [];
     channel.push(callback);
   }
 
   any (callback) {
     this.subscribe(ALL, callback);
   }
-}
-
-function subscribersOf (channel) {
-  return CHANNELS[channel] || [];
 }

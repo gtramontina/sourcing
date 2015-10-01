@@ -24,18 +24,4 @@ describe('InMemoryEventTransport', () => {
       assert.deepEqual(allEvents, [['event 1', event1], ['event 2', event2]]);
     });
   });
-
-  describe('.reset', () => {
-    it('clears any existing data', () => {
-      const transport = new InMemoryEventTransport();
-      let actualEvent1;
-      const event1 = { event: '1' };
-
-      transport.subscribe('event 1', event => actualEvent1 = event);
-      InMemoryEventTransport.reset();
-      transport.publish('event 1', event1);
-
-      assert.ok(actualEvent1 === undefined, 'should clear all listeners');
-    });
-  });
 });

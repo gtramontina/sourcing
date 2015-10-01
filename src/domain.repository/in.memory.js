@@ -1,18 +1,18 @@
-const STORE = [];
 const CREATED_AT = '_createdAt_';
 
+const store = Symbol();
 export default class InMemoryEventStore {
-  static reset () {
-    STORE.splice(0, STORE.length);
+  constructor () {
+    this[store] = []
   }
 
   save (rawEvent) {
     rawEvent[CREATED_AT] = nowInNanoseconds();
-    STORE.push(rawEvent);
+    this[store].push(rawEvent);
   }
 
   queryByUUID (uuid) {
-    return STORE.
+    return this[store].
       filter(event => event.aggregateUUID === uuid).
       sort((a, b) => a[CREATED_AT] - b[CREATED_AT]);
   }

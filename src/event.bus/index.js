@@ -1,6 +1,10 @@
 const transport = Symbol();
 
 export default class EventBus {
+  constructor () {
+    throw new TypeError(`"${this.constructor.name}" is a static class.`);
+  }
+
   static set transport (newTransport) {
     this[transport] = newTransport;
   }
