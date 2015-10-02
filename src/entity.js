@@ -35,6 +35,10 @@ export default class Entity {
     return this[appliedEvents].slice(0);
   }
 
+  setPristine () {
+    this[appliedEvents].length = 0;
+  }
+
   set uuid (newUUID) {
     this[uuid] = newUUID;
   }

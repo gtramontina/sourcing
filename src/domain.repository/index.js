@@ -37,6 +37,7 @@ export default class DomainRepository {
         Reflect.apply(save, this, [event]);
         EventBus.publish(event.name, event.data);
       });
+      aggregate.setPristine();
     });
     Reflect.deleteProperty(process, 'aggregates');
   }

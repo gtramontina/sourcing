@@ -65,4 +65,14 @@ describe('Entity', () => {
     it('runs the event handler function', () => assert.equal(entity.counter, 1));
     it('fails if the event handler is not implemented', () => assert.throws(() => entity.applyEvent(new Event('not implemented')), ReferenceError));
   });
+
+  describe('#setPristine', () => {
+    it("cleans up the entity's applied events", () => {
+      const entity = SampleEntity.create();
+      entity.applyEvent(new Event('counter incremented', {}));
+      entity.setPristine();
+
+      assert.deepEqual(entity.appliedEvents, []);
+    });
+  });
 });

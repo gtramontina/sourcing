@@ -25,17 +25,24 @@ describe('DomainRepository', () => {
   it('is a static class', () => assert.throws(() => new DomainRepository(), TypeError));
 
   describe('.commit', () => {
-    it('applies the events in chronological order', () => {
+    let entity;
+    beforeEach(() => {
       DomainRepository.begin();
-      const entity = SampleEntity.create();
+      entity = SampleEntity.create();
       entity.appendToName('FirstName');
       entity.appendToName('LastName');
       DomainRepository.commit();
+    });
 
+    it('applies the events in chronological order', () => {
       const restoredInstance = DomainRepository.find(SampleEntity, entity.uuid);
       assert.equal(restoredInstance.constructor.name, 'SampleEntity');
       assert.equal(restoredInstance.uuid, entity.uuid);
       assert.equal(restoredInstance.name, 'FirstNameLastName');
+    });
+
+    it("cleans up the entity's applied events", () => {
+      assert.deepEqual(entity.appliedEvents, []);
     });
   });
 
