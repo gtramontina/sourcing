@@ -12,6 +12,7 @@
     "babel": "^5.8.23",
     "co": "^4.6.0",
     "pascal-case": "^1.1.1",
+    "sentence-case": "^1.1.2",
     "uuid": "^2.0.1"
   },
   "devDependencies": {

@@ -27,4 +27,26 @@ describe('Event', () => {
       });
     });
   });
+
+  describe('.new', () => {
+    class SomethingHappened extends Event.new('one', 'two') {}
+    class SomethingHappenedEvent extends Event.new('three') {}
+    class NothingHappened extends Event.new() {}
+
+    it('infers the event name from the class name', () => {
+      assert.equal(new SomethingHappened().name, 'something happened');
+      assert.equal(new SomethingHappenedEvent().name, 'something happened');
+      assert.equal(new NothingHappened().name, 'nothing happened');
+    });
+
+    it('holds only the data specified in the "new" function call', () => {
+      const somethingHappened = new SomethingHappened({ one: 1, two: 2, three: 3 });
+      const somethingHappenedEvent = new SomethingHappenedEvent({ one: 1, two: 2, three: 3 });
+      const nothingHappened = new NothingHappened({ one: 1, two: 2, three: 3 });
+
+      assert.deepEqual(somethingHappened.data, { one: 1, two: 2 });
+      assert.deepEqual(somethingHappenedEvent.data, { three: 3 });
+      assert.deepEqual(nothingHappened.data, {});
+    });
+  });
 });
