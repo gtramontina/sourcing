@@ -3,10 +3,14 @@ SHELL     := /usr/bin/env bash
 CPUS      := $(shell node -p "require('os').cpus().length" 2> /dev/null || echo 1)
 MAKEFLAGS += --jobs $(CPUS)
 # ==============================================================================
+SRC       := src
+LIB       := lib
+SRC_FILES := $(shell find $(SRC) -type f -iname '*.js')
+LIB_FILES := $(patsubst $(SRC)/%, $(LIB)/%, $(SRC_FILES))
 
 #:Test and Lint
 .PHONY: all
-all: test lint
+all: test lint dist
 
 #:Install all required modules
 .PHONY: install
@@ -44,14 +48,22 @@ test.watch: node_modules/nodemon
 #:Check for inconsistencies
 .PHONY: lint
 lint: node_modules
-	@eslint --parser 'babel-eslint' $(LINT_FLAGS) src/** tests/**
+	@eslint --parser 'babel-eslint' $(LINT_FLAGS) $(SRC)/** tests/**
 
 #:Release to NPM
 .PHONY: release
-release:
+release: dist
 	@semantic-release pre
 	@npm publish
 	@semantic-release post
+
+#:Transpile everything. This is what gets released
+.PHONY: dist
+dist: $(LIB_FILES)
+
+$(LIB)/%.js: $(SRC)/%.js
+	@mkdir -p $(dir $@)
+	babel $< > $@
 
 #:This list
 .PHONY: ?
