@@ -14,8 +14,17 @@ export default class InMemoryEventStore {
   queryByUUID (uuid) {
     return this[store].
       filter(event => event.aggregateUUID === uuid).
-      sort((a, b) => a[CREATED_AT] - b[CREATED_AT]);
+      sort(byCreatedAt);
   }
+
+  all () {
+    return this[store].
+      sort(byCreatedAt);
+  }
+}
+
+function byCreatedAt (a, b) {
+  return a[CREATED_AT] - b[CREATED_AT];
 }
 
 function nowInNanoseconds () {
