@@ -39,6 +39,12 @@ describe('Event', () => {
       assert.equal(new NothingHappened().name, 'nothing happened');
     });
 
+    it('correctly defines the event handler name based on the class name', () => {
+      assert.equal(new SomethingHappened().handlerName, 'onSomethingHappened');
+      assert.equal(new SomethingHappenedEvent().handlerName, 'onSomethingHappened');
+      assert.equal(new NothingHappened().handlerName, 'onNothingHappened');
+    });
+
     it('holds only the data specified in the "new" function call', () => {
       const somethingHappened = new SomethingHappened({ one: 1, two: 2, three: 3 });
       const somethingHappenedEvent = new SomethingHappenedEvent({ one: 1, two: 2, three: 3 });

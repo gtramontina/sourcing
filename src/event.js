@@ -15,7 +15,7 @@ export default class Event {
   get aggregateUUID () { return this[aggregateUUID]; }
   get data () { return this[data]; }
   get name () { return this[name]; }
-  get handlerName () { return `on${pascalCase(this[name])}`; }
+  get handlerName () { return `on${pascalCase(this.name)}`; }
 
   static new (...attributes) {
     return class extends Event {
