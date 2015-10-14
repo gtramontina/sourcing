@@ -23,7 +23,7 @@ export default class Event {
       get name () { return sentenceCase(this.constructor.name.replace(/Event$/, '')); }
       get data () {
         return attributes.reduce((filteredData, attribute) => {
-          if (this[data][attribute]) { filteredData[attribute] = this[data][attribute]; }
+          if (Reflect.has(this[data], attribute)) { filteredData[attribute] = this[data][attribute]; }
           return filteredData;
         }, {});
       }

@@ -46,11 +46,11 @@ describe('Event', () => {
     });
 
     it('holds only the data specified in the "new" function call', () => {
-      const somethingHappened = new SomethingHappened({ one: 1, two: 2, three: 3 });
+      const somethingHappened = new SomethingHappened({ one: 1, two: '', three: 3 });
       const somethingHappenedEvent = new SomethingHappenedEvent({ one: 1, two: 2, three: 3 });
       const nothingHappened = new NothingHappened({ one: 1, two: 2, three: 3 });
 
-      assert.deepEqual(somethingHappened.data, { one: 1, two: 2 });
+      assert.deepEqual(somethingHappened.data, { one: 1, two: '' });
       assert.deepEqual(somethingHappenedEvent.data, { three: 3 });
       assert.deepEqual(nothingHappened.data, {});
     });
