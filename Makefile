@@ -61,7 +61,7 @@ release: dist
 .PHONY: dist
 dist: $(LIB_FILES)
 
-$(LIB)/%.js: $(SRC)/%.js
+$(LIB)/%.js: $(SRC)/%.js node_modules
 	@mkdir -p $(dir $@)
 	babel $< > $@
 
