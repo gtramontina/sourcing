@@ -1,8 +1,9 @@
 node_modules/
 src/
 tests/
+coverage/
+example/
 .eslintrc
 .gitignore
 .travis.yml
 Makefile
-README.md
