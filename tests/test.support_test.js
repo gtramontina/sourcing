@@ -6,7 +6,7 @@ import * as TestSupport from 'src/test.support';
 class SampleEntity extends Entity {
   static create (name) {
     const self = new this();
-    self.applyEvent(new Event('entity created', { uuid: 'new uuid', name: name }));
+    self.applyEvent(new Event('entity created', { uuid: 'new uuid', name }));
     return self;
   }
   onEntityCreated () {}
