@@ -1,4 +1,4 @@
-PATH      := node_modules/.bin:$(PATH)
+PATH      := $(PATH):node_modules/.bin
 SHELL     := /usr/bin/env bash
 CPUS      := $(shell node -p "require('os').cpus().length" 2> /dev/null || echo 1)
 MAKEFLAGS += --jobs $(CPUS)
