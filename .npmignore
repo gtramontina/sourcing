@@ -2,5 +2,7 @@ node_modules/
 src/
 tests/
 .eslintrc
+.gitignore
 .travis.yml
+Makefile
 README.md
