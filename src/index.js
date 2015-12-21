@@ -1,3 +1,5 @@
+import 'babel-polyfill';
+
 exports.Entity           = require('./entity');
 exports.Event            = require('./event');
 exports.Report           = require('./report');

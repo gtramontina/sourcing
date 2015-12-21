@@ -36,7 +36,7 @@ MOCHA := mocha
 endif
 test: node_modules
 	@NODE_PATH=. time -p $(MOCHA) \
-		--compilers js:babel/register --reporter $(REPORTER) \
+		--compilers js:babel-register --reporter $(REPORTER) \
 		"tests/**/*_test.js"
 
 #:Run all tests and re-run them upon file changes

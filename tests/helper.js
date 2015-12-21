@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import assert from 'assert';
 global.assert = assert;
 
