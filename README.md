@@ -3,6 +3,15 @@
   <sub align="center"><sub>Simple <a href="http://docs.geteventstore.com/introduction/event-sourcing-basics/">Event</a> <a href="http://martinfowler.com/eaaDev/EventSourcing.html">Sourcing</a>.</sub></sub></p>
 </h2>
 
+<h2 align="center">
+  <p align="center">
+    <a href="https://www.npmjs.com/package/sourcing"><img alt="npm" src="https://img.shields.io/npm/v/sourcing.svg"></a>
+    <a href="https://travis-ci.org/gtramontina/sourcing"><img alt="Travis" src="https://img.shields.io/travis/gtramontina/sourcing.svg"></a>
+    <a href="https://codecov.io/github/gtramontina/sourcing"><img alt="Codecov" src="https://img.shields.io/codecov/c/github/gtramontina/sourcing.svg"></a>
+    <a href="https://gitter.im/gtramontina/sourcing"><img alt="Gitter" src="https://img.shields.io/gitter/room/gtramontina/sourcing.js.svg"></a>
+  </p>
+</h2>
+
 ### Contributing
 
 ```bash
