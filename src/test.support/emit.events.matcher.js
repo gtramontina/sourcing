@@ -1,32 +1,48 @@
-import { AssertionError } from 'assert';
 import { inspect } from 'util';
-import DomainRepository from './domain.repository';
-import EventBus from './event.bus';
-import InMemoryEventStore  from './domain.repository/in.memory'
-const voidEventTransport = { publish: () => {} };
+import { AssertionError } from 'assert';
+import DomainRepository from '../domain.repository';
+import EventBus from '../event.bus';
+import InMemoryEventStore  from '../domain.repository/in.memory'
 
-function emitEvents (block, expectedEvents) {
-  let originalEventStore;
-  let originalEventTransport;
-  try { originalEventStore = DomainRepository.eventStore; } catch (e) { originalEventStore = null; }
-  try { originalEventTransport = EventBus.transport; } catch (e) { originalEventTransport = null; }
+export default class EmitEventsMatcher {
+  constructor (blockToRun) {
+    this.blockToRun = blockToRun;
+  }
 
-  try {
-    EventBus.transport = voidEventTransport;
-    const temporaryEventStore = new InMemoryEventStore();
-    DomainRepository.eventStore = temporaryEventStore;
+  match (expectedEvents) {
+    try {
+      this.setup();
+      this.run();
+      this.compare(expectedEvents);
+    } finally {
+      this.tearDown();
+    }
+  }
 
-    DomainRepository.begin();
-    block();
+  setup () {
+    try { this.originalEventStore = DomainRepository.eventStore; } catch (e) { this.originalEventStore = null; }
+    try { this.originalEventTransport = EventBus.transport; } catch (e) { this.originalEventTransport = null; }
+    EventBus.transport = { publish: () => {} };
     DomainRepository.commit();
+    DomainRepository.eventStore = this.temporaryEventStore = new InMemoryEventStore();
+  }
 
-    const actualEvents = temporaryEventStore.all();
+  run () {
+    DomainRepository.begin();
+    this.blockToRun();
+    DomainRepository.commit();
+  }
+
+  compare (expectedEvents) {
+    const actualEvents = this.temporaryEventStore.all();
     if (!matches(actualEvents, expectedEvents)) {
       throw new AssertionError({ message: errorMessageFor(actualEvents, expectedEvents) });
     }
-  } finally {
-    DomainRepository.eventStore = originalEventStore;
-    EventBus.transport = originalEventTransport;
+  }
+
+  tearDown () {
+    DomainRepository.eventStore = this.originalEventStore;
+    EventBus.transport = this.originalEventTransport;
   }
 }
 
@@ -58,17 +74,11 @@ function toOrderedList (event, index) {
 }
 
 function errorMessageFor (actualEvents, expectedEvents) {
-
   return `The block didn't produce the expected events.
-
     The following events where expected in this order:
     ${expectedEvents.map(toOrderedList).join('\n    ')}
 
     These where received instead:
     ${actualEvents.map(toOrderedList).join('\n    ')}
   `;
-}
-
-export function augmentAssert (assert) {
-  assert.emitEvents = emitEvents;
 }
