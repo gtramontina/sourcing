@@ -10,7 +10,7 @@
     "url": "https://github.com/gtramontina/sourcing.git"
   },
   "dependencies": {
-    "babel-polyfill": "^6.3.14",
+    "babel-polyfill": "^6.13.0",
     "co": "^4.6.0",
     "pascal-case": "^1.1.2",
     "sentence-case": "^1.1.3",
